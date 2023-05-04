@@ -1,0 +1,7 @@
+node_modules
+build
+.eslintrc.cjs
+vite.config.js
+.package.json
+.package-lock.json
+src/utils/CCapture.all.min.js
