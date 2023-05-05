@@ -27,6 +27,7 @@ export default function Scene({ config, gradient, recording, setRecording, expor
       uColor9: { value: new Vector4(0, 0, 0, 1) },
       uDistortion: { value: 0.5 },
       uNoise: { value: 0.25 },
+      uSpeed: { value: 0.25 },
       uDuration: { value: 8 },
     }),
     [],
@@ -36,6 +37,7 @@ export default function Scene({ config, gradient, recording, setRecording, expor
     if (gradient.current) {
       gradient.current.material.uniforms.uDistortion.value = config.distortion;
       gradient.current.material.uniforms.uNoise.value = config.noise;
+      gradient.current.material.uniforms.uSpeed.value = config.speed;
       gradient.current.material.uniforms.uDuration.value = config.duration;
       gradient.current.material.uniforms.uCount.value = config.gradient.length;
       config.gradient
@@ -75,7 +77,7 @@ export default function Scene({ config, gradient, recording, setRecording, expor
       if (current - start <= duration) {
         if (exportSeqBtn.current) {
           const t = (current - start) / duration;
-          const colorBg = '#282826';
+          const colorBg = '#373c4b';
           const colorProgress = '#007bff';
           exportSeqBtn.current.style.background = `linear-gradient(to right, ${colorProgress} ${
             t * 100

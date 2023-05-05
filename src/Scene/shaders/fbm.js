@@ -107,43 +107,31 @@ const fbm = /* glsl */ `
     return 2.2 * n_xyz;
   }
 
-  #define numOctaves 3
+  #define numOctaves 2
 
-  float fbm( vec2 x, vec2 uv)
-  {    
-    // vec2 tt = fadeCalc(0., .15, 8., 3.); 
-    // tt.x = easeInOutCubic(tt.x);
-
-    // float ld = 20.;
-    // float td = mod(time + fract(uv.x * 4.)*ld/4.*0. + (uv.y*.5+.5)*0., ld) / ld;
-    // td = easeInOutQuad(td);
-    // td = pow(td, .5);
-    // float u = td * pi * 1.;
-    // if (time < 0.) tt = 0.;
-    // if (time >= ld) u = 0.;
-    // u = 0.;
-
-    // float G = exp2(-2.);
-    float G = 0.5;
+  float fbm(vec2 uv, float u) {
+    float G = exp2(-2.);
+    // float G = 0.5;
     float f = 1.0;
     float a = 1.0;
     float t = 0.0;
-    for( int i=0; i<numOctaves; i++ )
-    {
-        // vec2 q = f * sin(x+1.*sin(x+.5*sin(x+.25*sin(x)))) + fract(x.x*10.+x.y*10.)*.1 + fract(length(x))*0.;
-        vec2 q = f * sin(x) + fract(x.x*1.)*.0 + fract(length(x))*0.;
-        //  q *= sin(u);
-        t += a*cnoise(vec3(q.x,q.y+(uTime/(4.+uv.y*0.)*0.) + 1000.*0.,-1000.-uTime/4.+length((uv+vec2(sin(uTime/4.), cos(uTime/4.))*.1)*1.5)));
-        // t *= .5+(uv.y+.5)*.5;
-        // t *= map(uv.y, -.5, .5, tt.y >= 2. ? tt.x : pow(tt.x, 2.), tt.y >= 2. ? tt.x : pow(tt.x, 2.));
+    for (int i = 0; i < numOctaves; i++) {
+        vec2 q = f * sin(uv + uDistortion);
+
+        t += a * cnoise(vec3(
+          q.x,
+          q.y,
+          -1000. - uTime*uSpeed + length((uv  + float(i)*1. + t + vec2(sin(t + uTime*uSpeed), cos(t - uTime*uSpeed)) * .1) * 1.5)));
+
+        // t += a * cnoise(vec3(
+        //   q.x, 
+        //   q.y,
+        //   -1000. + length((uv + t + vec2(sin(t + u), cos(t - u)) * .1) * 2.)
+        // ));
        
         f *= 2.0;
         a *= G;
-        // t *= tt.x;
     }
-        // t *= sin(u);
-        // t *= tt.x;
-        // t *= uv.;
     return t;
   }
 `;

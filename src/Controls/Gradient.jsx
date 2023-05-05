@@ -134,7 +134,7 @@ export default function Gradient({ gradient, viewport, config }) {
   };
 
   return (
-    <div className="gradient-picker">
+    <div className="controls-gradient">
       <div>Gradient</div>
       <div className="gradient-bar-container">
         <div

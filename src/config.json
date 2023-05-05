@@ -2,7 +2,8 @@
   "id": "092d3c73-157f-4d95-896b-ba227ae2ec8a",
   "noise": 0.25,
   "distortion": 0.5,
-  "duration": 8,
+  "speed": 0.5,
+  "duration": 1,
   "size": { "name": "Custom", "width": 1080, "height": 1080 },
   "sizeCustom": { "width": 1080, "height": 1080 },
   "gradient": [

@@ -61,7 +61,7 @@ export default function Size({ container, setViewport, config }) {
   };
 
   return (
-    <div className="size">
+    <div className="controls-size">
       <div>Size</div>
       <div className="size-inputs">
         <div className="size-select">

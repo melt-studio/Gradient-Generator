@@ -110,6 +110,14 @@ export default function Sliders({ gradient, config }) {
       id: MathUtils.generateUUID(),
     },
     {
+      name: 'Speed',
+      min: 0,
+      max: 1,
+      step: 0.01,
+      value: config.speed,
+      id: MathUtils.generateUUID(),
+    },
+    {
       name: 'Duration',
       label: 'Duration (s)',
       min: 1,
