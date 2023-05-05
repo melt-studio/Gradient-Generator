@@ -111,14 +111,14 @@ const fbm = /* glsl */ `
 
   float fbm( vec2 x, vec2 uv)
   {    
-    vec2 tt = fadeCalc(0., .15, 8., 3.); 
+    // vec2 tt = fadeCalc(0., .15, 8., 3.); 
     // tt.x = easeInOutCubic(tt.x);
 
-    float ld = 20.;
-    float td = mod(time + fract(uv.x * 4.)*ld/4.*0. + (uv.y*.5+.5)*0., ld) / ld;
+    // float ld = 20.;
+    // float td = mod(time + fract(uv.x * 4.)*ld/4.*0. + (uv.y*.5+.5)*0., ld) / ld;
     // td = easeInOutQuad(td);
     // td = pow(td, .5);
-    float u = td * pi * 1.;
+    // float u = td * pi * 1.;
     // if (time < 0.) tt = 0.;
     // if (time >= ld) u = 0.;
     // u = 0.;
@@ -133,7 +133,7 @@ const fbm = /* glsl */ `
         // vec2 q = f * sin(x+1.*sin(x+.5*sin(x+.25*sin(x)))) + fract(x.x*10.+x.y*10.)*.1 + fract(length(x))*0.;
         vec2 q = f * sin(x) + fract(x.x*1.)*.0 + fract(length(x))*0.;
         //  q *= sin(u);
-        t += a*cnoise(vec3(q.x,q.y+(time/(4.+uv.y*0.)*0.) + 1000.*0.,-1000.-time/4.+length((uv+t+vec2(sin(t+time/4.), cos(t-time/4.))*.1)*1.5)));
+        t += a*cnoise(vec3(q.x,q.y+(uTime/(4.+uv.y*0.)*0.) + 1000.*0.,-1000.-uTime/4.+length((uv+vec2(sin(uTime/4.), cos(uTime/4.))*.1)*1.5)));
         // t *= .5+(uv.y+.5)*.5;
         // t *= map(uv.y, -.5, .5, tt.y >= 2. ? tt.x : pow(tt.x, 2.), tt.y >= 2. ? tt.x : pow(tt.x, 2.));
        

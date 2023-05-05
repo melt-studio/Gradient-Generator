@@ -5,7 +5,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { MathUtils, Color } from 'three';
 import Draggable from 'react-draggable';
 
-export default function Gradient({ gradient, viewport }) {
+export default function Gradient({ gradient, viewport, config }) {
   const width = 300;
   const height = 40;
   const limit = { min: 2, max: 10 };
@@ -13,10 +13,17 @@ export default function Gradient({ gradient, viewport }) {
 
   const [position, setPosition] = useState(null);
 
-  const [colors, setColors] = useState([
-    { hex: '#bcfc45', stop: 0, id: MathUtils.generateUUID() },
-    { hex: '#ffffff', stop: 1, id: MathUtils.generateUUID() },
-  ]);
+  // const [colors, setColors] = useState([
+  //   { hex: '#bcfc45', stop: 0, id: MathUtils.generateUUID() },
+  //   { hex: '#ffffff', stop: 1, id: MathUtils.generateUUID() },
+  // ]);
+
+  const [colors, setColors] = useState(
+    config.gradient.map((c) => ({
+      ...c,
+      id: MathUtils.generateUUID(),
+    })),
+  );
 
   const [presets, setPresets] = useState([
     { id: MathUtils.generateUUID(), colors: colors.map((c) => ({ ...c })) },
@@ -27,6 +34,16 @@ export default function Gradient({ gradient, viewport }) {
   const bar = useRef();
   const picker = useRef();
   const pickerColors = useRef();
+
+  useEffect(() => {
+    // console.log('useeffect', config.gradient);
+    setColors(
+      config.gradient.map((c) => ({
+        ...c,
+        id: MathUtils.generateUUID(),
+      })),
+    );
+  }, [config]);
 
   const getBackground = useCallback(
     (cols = colors) =>
@@ -50,7 +67,7 @@ export default function Gradient({ gradient, viewport }) {
   // }, [presets]);
 
   useEffect(() => {
-    console.log(colors);
+    // console.log(colors);
     // console.log(getBackground());
     if (bar.current) {
       bar.current.style.background = getBackground();
@@ -71,6 +88,19 @@ export default function Gradient({ gradient, viewport }) {
         });
     }
   }, [colors, gradient]);
+
+  const updateLocalStorage = (values) => {
+    // console.log(values);
+    const localConfig = window.localStorage.getItem('melt-gradient-config');
+    if (localConfig) {
+      const lConfig = JSON.parse(localConfig);
+      if (lConfig.gradient !== undefined) {
+        lConfig.gradient = values.map((c) => ({ ...c }));
+      }
+      lConfig.id = MathUtils.generateUUID();
+      window.localStorage.setItem('melt-gradient-config', JSON.stringify(lConfig));
+    }
+  };
 
   const createColor = (e) => {
     if (e.target.classList.contains('gradient-colors')) {
@@ -99,6 +129,7 @@ export default function Gradient({ gradient, viewport }) {
 
       // console.log(newColor);
       setColors(colors.concat(newColor));
+      updateLocalStorage(colors.concat(newColor));
     }
   };
 
@@ -141,6 +172,7 @@ export default function Gradient({ gradient, viewport }) {
                     cols[i].stop = stop;
                   }
                   setColors(cols);
+                  updateLocalStorage(cols);
                 }}
                 // onDrag={(e) => {
                 //   if (!e.target.classList.contains("dragging")) {
@@ -184,15 +216,15 @@ export default function Gradient({ gradient, viewport }) {
             //   setPickerColor({ ...pickerColor, hex: e.target.value });
             // }}
             onChange={(e) => {
-              setColors(
-                colors.map((c) => {
-                  if (c.id === pickerColor.id) {
-                    return { ...c, hex: e.target.value };
-                  }
+              const cols = colors.map((c) => {
+                if (c.id === pickerColor.id) {
+                  return { ...c, hex: e.target.value };
+                }
 
-                  return c;
-                }),
-              );
+                return c;
+              });
+              setColors(cols);
+              updateLocalStorage(cols);
               setPickerColor({ ...pickerColor, hex: e.target.value });
               // if (pickerColors.current) {
               //   pickerColors.current.childNodes.forEach((c) =>
@@ -215,7 +247,9 @@ export default function Gradient({ gradient, viewport }) {
                 // Only update color if not clicking on remove
                 // if (!e.target.classList.contains("gradient-preset-remove")) {
                 // console.log("preset click");
-                setColors(p.colors.map((c) => ({ ...c })));
+                const cols = p.colors.map((c) => ({ ...c }));
+                setColors(cols);
+                updateLocalStorage(cols);
                 // }
               }}
             />

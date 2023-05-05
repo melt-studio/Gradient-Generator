@@ -1,5 +1,7 @@
-export default function Buttons() {
-  const saveImage = () => {
+// import { useState } from 'react';
+
+export default function Buttons({ recording, setRecording, exportSeqBtn }) {
+  const exportImage = () => {
     const canvas = document.getElementById('canvas');
     const imgData = canvas.toDataURL('image/png');
     const a = document.createElement('a');
@@ -11,23 +13,29 @@ export default function Buttons() {
     document.body.removeChild(a);
   };
 
-  const saveSequence = () => {
-    console.log('sequence');
+  const exportSequence = () => {
+    if (recording) {
+      exportSeqBtn.current.style.removeProperty('background');
+    }
+
+    setRecording(!recording);
   };
 
   const buttons = [
-    { name: 'Export Image (PNG)', onClick: saveImage },
+    { name: 'image', text: 'Export Image (PNG)', onClick: exportImage, ref: null },
     {
-      name: 'Export Image Sequence (PNG)',
-      onClick: saveSequence,
+      name: 'sequence',
+      text: 'Export Image Sequence (PNG)',
+      onClick: exportSequence,
+      ref: exportSeqBtn,
     },
   ];
 
   return (
     <div className="controls-buttons">
       {buttons.map((b) => (
-        <button type="button" key={b.name} onClick={b.onClick}>
-          {b.name}
+        <button ref={b.ref} type="button" key={b.name} onClick={b.onClick}>
+          {b.name === 'sequence' && recording ? 'Recording... (click to cancel)' : b.text}
         </button>
       ))}
     </div>

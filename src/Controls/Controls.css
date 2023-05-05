@@ -24,7 +24,7 @@
   justify-content: space-between;
 }
 
-.size input {
+.controls input[type='text'] {
   background: #373c4b;
   padding: 6px;
   border-radius: 4px;
@@ -35,6 +35,8 @@
   font-size: 11px;
   font-family: ui-monospace, SFMono-Regular, Menlo, 'Roboto Mono', monospace;
   color: #8c92a4;
+}
+.size input[type='text'] {
   width: 50px;
 }
 

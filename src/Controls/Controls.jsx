@@ -5,7 +5,16 @@ import Sliders from './Sliders';
 import Buttons from './Buttons';
 import './Controls.css';
 
-export default function Controls({ config, gradient, container }) {
+// eslint-disable-next-line object-curly-newline
+export default function Controls({
+  config,
+  gradient,
+  container,
+  recording,
+  setRecording,
+  exportSeqBtn,
+  // eslint-disable-next-line object-curly-newline
+}) {
   const [viewport, setViewport] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -23,13 +32,13 @@ export default function Controls({ config, gradient, container }) {
 
   return (
     <div className="controls">
-      <Size container={container} setViewport={setViewport} />
+      <Size container={container} setViewport={setViewport} config={config} />
       <hr />
-      <Gradient gradient={gradient} viewport={viewport} />
+      <Gradient gradient={gradient} viewport={viewport} config={config} />
       <hr />
       <Sliders gradient={gradient} config={config} />
       <hr />
-      <Buttons />
+      <Buttons recording={recording} setRecording={setRecording} exportSeqBtn={exportSeqBtn} />
     </div>
   );
 }
