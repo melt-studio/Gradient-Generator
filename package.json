@@ -1,8 +1,7 @@
 {
-  "name": "threejs-journey-exercise",
+  "name": "melt-gradient",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -22,6 +21,7 @@
   "dependencies": {
     "@react-three/drei": "^9.50.3",
     "@react-three/fiber": "^8.9.2",
+    "axios": "^1.4.0",
     "leva": "^0.9.34",
     "p5": "^1.6.0",
     "r3f-perf": "^6.6.3",

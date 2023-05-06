@@ -4,8 +4,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { MathUtils, Color } from 'three';
 import Draggable from 'react-draggable';
+import presetService from '../services/presets';
 
-export default function Gradient({ gradient, viewport, config }) {
+export default function Gradient({ gradient, viewport, config, presets, setPresets }) {
   const width = 300;
   const height = 40;
   const limit = { min: 2, max: 10 };
@@ -25,9 +26,9 @@ export default function Gradient({ gradient, viewport, config }) {
     })),
   );
 
-  const [presets, setPresets] = useState([
-    { id: MathUtils.generateUUID(), colors: colors.map((c) => ({ ...c })) },
-  ]);
+  // const [presets, setPresets] = useState([
+  //   { id: MathUtils.generateUUID(), colors: colors.map((c) => ({ ...c })) },
+  // ]);
 
   const [pickerColor, setPickerColor] = useState(colors[0]);
 
@@ -130,6 +131,30 @@ export default function Gradient({ gradient, viewport, config }) {
       // console.log(newColor);
       setColors(colors.concat(newColor));
       updateLocalStorage(colors.concat(newColor));
+    }
+  };
+
+  const createPreset = async (preset) => {
+    try {
+      const newPreset = {
+        // id: MathUtils.generateUUID(),
+        colors: preset.map((c) => ({ ...c })),
+      };
+
+      const savedPreset = await presetService.createPreset(newPreset);
+
+      setPresets(presets.concat(savedPreset));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removePreset = async (id) => {
+    try {
+      await presetService.removePreset(id);
+      setPresets(presets.filter((preset) => preset.id !== id));
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -254,29 +279,10 @@ export default function Gradient({ gradient, viewport, config }) {
               }}
             />
 
-            <div
-              className="gradient-preset-remove"
-              onClick={() => {
-                // console.log("remove click");
-                setPresets(presets.filter((preset) => preset.id !== p.id));
-              }}
-            />
+            <div className="gradient-preset-remove" onClick={() => removePreset(p.id)} />
           </div>
         ))}
-        <div
-          className="gradient-preset add"
-          onClick={() => {
-            // console.log(presets.find((p) => p === colors));
-            // if (!presets.find((p) => p.colors === colors)) {
-            setPresets(
-              presets.concat({
-                id: MathUtils.generateUUID(),
-                colors: colors.map((c) => ({ ...c })),
-              }),
-            );
-            // }
-          }}
-        >
+        <div className="gradient-preset add" onClick={() => createPreset(colors)}>
           <span />
         </div>
       </div>

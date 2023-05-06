@@ -47,9 +47,11 @@ const fragmentShader = /* glsl */ `
     // vUv2 *= uDistortion;
     // vUv2 = vUv * uDistortion;
     float f = fbm(vUv2, u);
-    f = fbm(vUv2 + f*5. * uDistortion, u);
+    f = fbm(vUv2 + f*5. * uDistortion * 2., u);
     // f = fbm(vUv2*2. + f*2.5, vUv, -u);
     f = f*.5+.5;
+    // f = sin(length(vUv * 2. - 1. - vec2(.5)) + uTime) + sin(length(vUv * 2. - 1. + vec2(.5)) + uTime);
+    // f /= 2.;
     f *= 1. - pow(rand(vUv2 + f), 1.) * (uNoise * 0.5);
     f = clamp(f, 0., 1.);
 

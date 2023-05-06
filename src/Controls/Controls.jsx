@@ -13,6 +13,8 @@ export default function Controls({
   recording,
   setRecording,
   exportSeqBtn,
+  presets,
+  setPresets,
   // eslint-disable-next-line object-curly-newline
 }) {
   const [viewport, setViewport] = useState({
@@ -34,7 +36,13 @@ export default function Controls({
     <div className="controls">
       <Size container={container} setViewport={setViewport} config={config} />
       <hr />
-      <Gradient gradient={gradient} viewport={viewport} config={config} />
+      <Gradient
+        gradient={gradient}
+        viewport={viewport}
+        config={config}
+        presets={presets}
+        setPresets={setPresets}
+      />
       <hr />
       <Sliders gradient={gradient} config={config} />
       <hr />

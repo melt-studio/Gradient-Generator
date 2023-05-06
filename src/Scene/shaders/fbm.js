@@ -116,12 +116,17 @@ const fbm = /* glsl */ `
     float a = 1.0;
     float t = 0.0;
     for (int i = 0; i < numOctaves; i++) {
-        vec2 q = f * sin(uv + uDistortion);
+        vec2 q = f * sin(uv + vec2(.5, .5) + uDistortion * 2.) * sin(uv - vec2(.5, .5) + PI + uDistortion * 2.);
 
         t += a * cnoise(vec3(
           q.x,
           q.y,
-          -1000. - uTime*uSpeed + length((uv  + float(i)*1. + t + vec2(sin(t + uTime*uSpeed), cos(t - uTime*uSpeed)) * .1) * 1.5)));
+          -1000. - uTime*uSpeed 
+            + length((uv +vec2(.5, .5) + float(i)*1. + t + vec2(sin(t + uTime*uSpeed), cos(t - uTime*uSpeed)) * .1) * .75)
+            + length(((uv - vec2(.5, .5))  - float(i)*1. - t + vec2(sin(t - uTime*uSpeed+PI/2.), cos(t + uTime*uSpeed+PI/2.)) * .1) * .75)
+            // + length((uv  + float(i)*1. - vec2(.7) + t + vec2(sin(t + uTime*uSpeed + PI), cos(t - uTime*uSpeed + PI)) * .7) * 1.5)
+          
+        ));
 
         // t += a * cnoise(vec3(
         //   q.x, 

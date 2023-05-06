@@ -5,6 +5,7 @@ import { Perf } from 'r3f-perf';
 import Controls from './Controls/Controls';
 import Scene from './Scene/Scene';
 import defaultConfig from './config.json';
+import presetService from './services/presets';
 
 export default function App() {
   const gradient = useRef();
@@ -13,6 +14,7 @@ export default function App() {
 
   const [config, setConfig] = useState(defaultConfig);
   const [recording, setRecording] = useState(false);
+  const [presets, setPresets] = useState([]);
 
   const created = ({ gl }) => {
     gl.domElement.setAttribute('id', 'canvas');
@@ -41,6 +43,19 @@ export default function App() {
     }
   }, []);
 
+  useEffect(() => {
+    const getPresets = async () => {
+      try {
+        const serverPresets = await presetService.getPresets();
+        setPresets(serverPresets);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getPresets();
+  }, []);
+
   return (
     <div
       id="canvas-container"
@@ -54,6 +69,8 @@ export default function App() {
         recording={recording}
         setRecording={setRecording}
         exportSeqBtn={exportSeqBtn}
+        presets={presets}
+        setPresets={setPresets}
       />
 
       <Canvas
