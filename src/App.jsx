@@ -14,6 +14,7 @@ export default function App() {
 
   const [config, setConfig] = useState(defaultConfig);
   const [recording, setRecording] = useState(false);
+  const [paused, setPaused] = useState(false);
   const [presets, setPresets] = useState([]);
 
   const created = ({ gl }) => {
@@ -68,6 +69,8 @@ export default function App() {
         container={container}
         recording={recording}
         setRecording={setRecording}
+        paused={paused}
+        setPaused={setPaused}
         exportSeqBtn={exportSeqBtn}
         presets={presets}
         setPresets={setPresets}
@@ -86,6 +89,8 @@ export default function App() {
           gradient={gradient}
           recording={recording}
           setRecording={setRecording}
+          paused={paused}
+          setPaused={setPaused}
           exportSeqBtn={exportSeqBtn}
         />
       </Canvas>

@@ -8,7 +8,17 @@ import fragmentShader from './shaders/fragment';
 // eslint-disable-next-line no-undef
 const capturer = new CCapture({ format: 'png', framerate: 60 });
 
-export default function Scene({ config, gradient, recording, setRecording, exportSeqBtn }) {
+// eslint-disable-next-line object-curly-newline
+export default function Scene({
+  config,
+  gradient,
+  recording,
+  setRecording,
+  paused,
+  setPaused,
+  exportSeqBtn,
+  // eslint-disable-next-line object-curly-newline
+}) {
   const uniforms = useMemo(
     () => ({
       uTime: { value: 0 },
@@ -53,6 +63,7 @@ export default function Scene({ config, gradient, recording, setRecording, expor
 
   useEffect(() => {
     if (recording && gradient.current) {
+      setPaused(false);
       // eslint-disable-next-line operator-linebreak
       gradient.current.material.uniforms.uFrameCount.value.y =
         gradient.current.material.uniforms.uFrameCount.value.x;
@@ -60,10 +71,10 @@ export default function Scene({ config, gradient, recording, setRecording, expor
     } else {
       capturer.stop();
     }
-  }, [recording, gradient]);
+  }, [recording, gradient, setPaused]);
 
   useFrame((state) => {
-    if (gradient.current) {
+    if (gradient.current && !paused) {
       gradient.current.material.uniforms.uFrameCount.value.x += 1;
       // eslint-disable-next-line operator-linebreak
       gradient.current.material.uniforms.uTime.value =

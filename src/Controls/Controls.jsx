@@ -12,6 +12,8 @@ export default function Controls({
   container,
   recording,
   setRecording,
+  paused,
+  setPaused,
   exportSeqBtn,
   presets,
   setPresets,
@@ -46,7 +48,13 @@ export default function Controls({
       <hr />
       <Sliders gradient={gradient} config={config} />
       <hr />
-      <Buttons recording={recording} setRecording={setRecording} exportSeqBtn={exportSeqBtn} />
+      <Buttons
+        recording={recording}
+        setRecording={setRecording}
+        paused={paused}
+        setPaused={setPaused}
+        exportSeqBtn={exportSeqBtn}
+      />
     </div>
   );
 }

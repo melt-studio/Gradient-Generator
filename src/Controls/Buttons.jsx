@@ -1,6 +1,6 @@
 // import { useState } from 'react';
 
-export default function Buttons({ recording, setRecording, exportSeqBtn }) {
+export default function Buttons({ recording, setRecording, paused, setPaused, exportSeqBtn }) {
   const exportImage = () => {
     const canvas = document.getElementById('canvas');
     const imgData = canvas.toDataURL('image/png');
@@ -21,7 +21,16 @@ export default function Buttons({ recording, setRecording, exportSeqBtn }) {
     setRecording(!recording);
   };
 
+  const pause = () => {
+    setPaused(!paused);
+  };
+
   const buttons = [
+    {
+      name: 'pause',
+      text: 'Pause',
+      onClick: pause,
+    },
     { name: 'image', text: 'Export Image (PNG)', onClick: exportImage, ref: null },
     {
       name: 'sequence',
@@ -31,11 +40,25 @@ export default function Buttons({ recording, setRecording, exportSeqBtn }) {
     },
   ];
 
+  const getText = (b) => {
+    if (b.name === 'sequence') {
+      if (recording) return 'Recording... (click to cancel)';
+      return b.text;
+    }
+
+    if (b.name === 'pause') {
+      if (paused) return 'Play';
+      return b.text;
+    }
+
+    return b.text;
+  };
+
   return (
     <div className="controls-buttons">
       {buttons.map((b) => (
         <button ref={b.ref} type="button" key={b.name} onClick={b.onClick}>
-          {b.name === 'sequence' && recording ? 'Recording... (click to cancel)' : b.text}
+          {getText(b)}
         </button>
       ))}
     </div>
