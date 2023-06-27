@@ -83,7 +83,7 @@ export default function Gradient({ gradient, viewport, config, presets, setPrese
         .map((c) => c)
         .sort((a, b) => a.stop - b.stop)
         .forEach((color, i) => {
-          const c = new Color(color.hex);
+          const c = new Color(color.hex).convertLinearToSRGB();
 
           gradient.current.material.uniforms[`uColor${i}`].value.set(c.r, c.g, c.b, color.stop);
         });

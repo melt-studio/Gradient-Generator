@@ -55,7 +55,8 @@ export default function Scene({
         .sort((a, b) => a.stop - b.stop)
         .forEach((g, i) => {
           if (i > 10) return;
-          const c = new Color(g.hex);
+          // const c = new Color(g.hex)
+          const c = new Color(g.hex).convertLinearToSRGB();
           gradient.current.material.uniforms[`uColor${i}`].value.set(c.r, c.g, c.b, g.stop);
         });
     }
