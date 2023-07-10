@@ -4,6 +4,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { MathUtils, Color } from 'three';
 import Draggable from 'react-draggable';
+import { ChromePicker } from 'react-color';
 import presetService from '../services/presets';
 
 export default function Gradient({ gradient, viewport, config, presets, setPresets }) {
@@ -31,9 +32,10 @@ export default function Gradient({ gradient, viewport, config, presets, setPrese
   // ]);
 
   const [pickerColor, setPickerColor] = useState(colors[0]);
+  const [displayPicker, setDisplayPicker] = useState(false);
 
   const bar = useRef();
-  const picker = useRef();
+  // const picker = useRef();
   const pickerColors = useRef();
 
   useEffect(() => {
@@ -213,12 +215,14 @@ export default function Gradient({ gradient, viewport, config, presets, setPrese
                   className="gradient-color"
                   onDoubleClick={() => {
                     // e.target.classList.add("active");
-                    if (picker.current) {
-                      picker.current.value = c.hex;
-                      setPickerColor(c);
-                      // picker.current.parentNode.classList.remove("hide");
-                      picker.current.click();
-                    }
+                    setPickerColor(c);
+                    setDisplayPicker(true);
+                    // if (picker.current) {
+                    //   picker.current.value = c.hex;
+                    //   setPickerColor(c);
+                    //   // picker.current.parentNode.classList.remove("hide");
+                    //   picker.current.click();
+                    // }
                   }}
                 >
                   <span
@@ -233,7 +237,32 @@ export default function Gradient({ gradient, viewport, config, presets, setPrese
         </div>
 
         <div className="color-picker">
-          <input
+          {displayPicker && (
+            <>
+              <div className="color-picker-overlay" onClick={() => setDisplayPicker(false)} />
+              <div className="color-picker-container">
+                <ChromePicker
+                  disableAlpha
+                  color={pickerColor.hex}
+                  onChange={(color) => {
+                    const { hex } = color;
+                    const cols = colors.map((c) => {
+                      if (c.id === pickerColor.id) {
+                        return { ...c, hex };
+                      }
+
+                      return c;
+                    });
+                    setColors(cols);
+                    updateLocalStorage(cols);
+                    setPickerColor({ ...pickerColor, hex });
+                  }}
+                />
+              </div>
+            </>
+          )}
+
+          {/* <input
             ref={picker}
             type="color"
             value={pickerColor.hex}
@@ -258,7 +287,7 @@ export default function Gradient({ gradient, viewport, config, presets, setPrese
               // }
               // picker.current.parentNode.classList.add("hide");
             }}
-          />
+          /> */}
         </div>
       </div>
       <hr />

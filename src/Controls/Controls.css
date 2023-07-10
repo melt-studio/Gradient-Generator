@@ -205,11 +205,26 @@
   border-radius: 2px;
 }
 
-.color-picker {
-  /* default browser color picker */
+/* default browser color picker */
+/* .color-picker {
   position: absolute;
   bottom: -10px;
   visibility: hidden;
+} */
+
+.color-picker-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.color-picker-container {
+  position: absolute;
+  z-index: 2;
+  /* top: 10px; */
+  margin-top: 10px;
 }
 
 .gradient-presets {
