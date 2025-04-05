@@ -84,7 +84,15 @@ const DragColor = ({
         className="relative w-0 h-6 group"
         onDoubleClick={handleDoubleClick}
       >
-        <span className="absolute w-6 h-6 top-0 left-0 p-0.5 cursor-pointer rounded-lg bg-white border border-slate-300 hover:border-slate-400 transition-colors group-[.react-draggable-dragging]:cursor-grabbing -translate-x-1/2">
+        <span
+          className="absolute w-6 h-6 top-0 left-0 p-0.5 cursor-pointer rounded-lg bg-white border border-slate-300 hover:border-slate-400 transition-colors group-[.react-draggable-dragging]:cursor-grabbing -translate-x-1/2"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.code === "Enter") {
+              handleDoubleClick();
+            }
+          }}
+        >
           <span className="w-full h-full rounded-md block" style={{ background: color.hex }}></span>
         </span>
         <div
@@ -280,6 +288,10 @@ const GradientPicker = ({ viewport }: GradientPickerProps) => {
               key={gradient.id}
               className="w-7 h-7 rounded-lg border border-slate-300 hover:border-slate-400 transition-colors p-0.5 cursor-pointer relative group flex items-center justify-center"
               onClick={() => setValue("gradient", gradient)}
+              onKeyDown={(e) => {
+                if (e.code === "Enter") setValue("gradient", gradient);
+              }}
+              tabIndex={0}
             >
               <div
                 className="w-full h-full rounded-md"
@@ -298,6 +310,10 @@ const GradientPicker = ({ viewport }: GradientPickerProps) => {
           <div
             className="w-7 h-7 bg-slate-100/0 border border-slate-300 hover:border-slate-400 p-1.5 transition-colors rounded-lg cursor-pointer flex items-center justify-center text-slate-500 hover:text-slate-700"
             onClick={() => addGradient(gradient)}
+            onKeyDown={(e) => {
+              if (e.code === "Enter") addGradient(gradient);
+            }}
+            tabIndex={0}
           >
             <PlusIcon className="w-full h-full" />
           </div>

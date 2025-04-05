@@ -22,6 +22,10 @@ const ToggleOption = <T extends Option>({ option, selected, onChange }: ToggleOp
         selected ? "bg-white" : "hover:bg-slate-50"
       }`}
       onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.code === "Enter") handleClick();
+      }}
+      tabIndex={0}
     >
       <div className="cursor-pointer text-center">{option.label}</div>
     </div>

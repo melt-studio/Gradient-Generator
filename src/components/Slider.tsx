@@ -41,8 +41,8 @@ const Slider = ({ label, value, onChange, step = 0.01, min = 0, max = 1 }: Slide
     <div className="flex items-center">
       {label && <label className="w-20">{label}</label>}
       <div className="flex items-center gap-2 grow">
-        <div className="flex items-center gap-2 w-full relative">
-          <div className="h-0.5 absolute left-2 right-2 bg-slate-300 pointer-events-none"></div>
+        <div className="flex items-center gap-2 w-full relative group">
+          <div className="h-0.5 absolute left-2 right-2 bg-slate-300 pointer-events-none group-hover:bg-slate-400/75 transition-colors"></div>
           <div className="h-4 absolute left-2 right-2 pointer-events-none">
             <div
               className="w-4 h-4 flex items-center justify-center absolute"
@@ -51,7 +51,7 @@ const Slider = ({ label, value, onChange, step = 0.01, min = 0, max = 1 }: Slide
                 transform: "translateX(-50%)",
               }}
             >
-              <div className="w-4 h-4 p-0.5 bg-white border border-slate-200 rounded-full">
+              <div className="w-4 h-4 p-0.5 bg-white border border-slate-200 rounded-full group-hover:border-slate-400/75 transition-colors">
                 <div className="w-full h-full bg-slate-600 rounded-full"></div>
               </div>
             </div>
@@ -67,6 +67,7 @@ const Slider = ({ label, value, onChange, step = 0.01, min = 0, max = 1 }: Slide
               relative
               appearance-none
               w-full
+              cursor-pointer
               [&::-webkit-slider-runnable-track]:appearance-none
               [&::-webkit-slider-runnable-track]:h-4
               [&::-webkit-slider-thumb]:w-4
