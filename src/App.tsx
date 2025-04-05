@@ -51,10 +51,10 @@ const App = () => {
             {debug && <Perf position="bottom-left" />}
             <Scene />
           </Canvas>
-          <Modal />
         </div>
       </div>
 
+      <Modal />
       <Controls />
     </div>
   );

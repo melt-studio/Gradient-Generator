@@ -13,7 +13,7 @@ const Modal = () => {
   };
 
   return (
-    <div className="absolute inset-0 flex justify-center items-center z-20 bg-slate-100/75">
+    <div className="absolute left-0 top-0 bottom-0 right-[400px] flex justify-center items-center z-20 bg-slate-100/75">
       <div className="w-[400px] h-fit p-4 rounded-lg bg-white text-xs">
         <div className="flex flex-col gap-4 h-full">
           <h3 className="text-xs">{modal.title}</h3>
