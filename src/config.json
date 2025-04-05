@@ -1,16 +1,43 @@
 {
   "id": "092d3c73-157f-4d95-896b-ba227ae2ec8a",
-  "noise": 0.25,
+  "grain": 0.25,
   "distortion": 0.5,
-  "speed": 0.5,
-  "duration": 1,
-  "size": { "name": "Custom", "width": 1080, "height": 1080 },
+  "speed": 1,
+  "color": 0.5,
+  "drips": 0,
+  "colorMode": { "label": "Pre-defined", "value": 0 },
+  "size": { "label": "Custom", "width": 1080, "height": 1080 },
   "sizeCustom": { "width": 1080, "height": 1080 },
-  "gradient": [
+  "gradient": {
+    "id": "gradient1",
+    "fixed": true,
+    "colors": [
+      {
+        "hex": "#000000",
+        "stop": 0,
+        "id": "color0"
+      },
+      { "hex": "#8077E9", "stop": 0.35, "id": "color1" },
+      { "hex": "#77F80F", "stop": 0.52, "id": "color2" },
+      { "hex": "#07AB96", "stop": 0.8, "id": "color3" },
+      { "hex": "#77F80F", "stop": 1, "id": "color4" }
+    ]
+  },
+  "gradients": [
     {
-      "hex": "#bcfc45",
-      "stop": 0
-    },
-    { "hex": "#ffffff", "stop": 1 }
+      "id": "gradient1",
+      "fixed": true,
+      "colors": [
+        {
+          "hex": "#000000",
+          "stop": 0,
+          "id": "color0"
+        },
+        { "hex": "#8077E9", "stop": 0.35, "id": "color1" },
+        { "hex": "#77F80F", "stop": 0.52, "id": "color2" },
+        { "hex": "#07AB96", "stop": 0.8, "id": "color3" },
+        { "hex": "#77F80F", "stop": 0.92, "id": "color4" }
+      ]
+    }
   ]
 }

@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    @apply box-border;
+  }
+
+  html {
+    @apply w-full h-dvh bg-slate-100 fixed overflow-hidden;
+  }
+
+  body {
+    @apply w-full h-full m-0 p-0 text-slate-700;
+  }
+
+  #root {
+    @apply w-full h-full bg-slate-100;
+  }
+}
