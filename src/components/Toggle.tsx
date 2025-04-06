@@ -8,11 +8,17 @@ type ToggleOptionProps<T extends Option> = {
   option: T;
   selected: boolean;
   onChange: (value: T) => void;
+  disabled?: boolean;
 };
 
-const ToggleOption = <T extends Option>({ option, selected, onChange }: ToggleOptionProps<T>) => {
+const ToggleOption = <T extends Option>({
+  option,
+  selected,
+  onChange,
+  disabled = false,
+}: ToggleOptionProps<T>) => {
   const handleClick = () => {
-    if (selected) return;
+    if (disabled || selected) return;
     onChange(option);
   };
 
@@ -25,7 +31,7 @@ const ToggleOption = <T extends Option>({ option, selected, onChange }: ToggleOp
       onKeyDown={(e) => {
         if (e.code === "Enter") handleClick();
       }}
-      tabIndex={0}
+      tabIndex={disabled ? -1 : 0}
     >
       <div className="cursor-pointer text-center">{option.label}</div>
     </div>
@@ -36,9 +42,15 @@ type ToggleProps<T> = {
   options: T[];
   value: T;
   onChange: (value: T) => void;
+  disabled?: boolean;
 };
 
-const Toggle = <T extends Option>({ options, value, onChange }: ToggleProps<T>) => {
+const Toggle = <T extends Option>({
+  options,
+  value,
+  onChange,
+  disabled = false,
+}: ToggleProps<T>) => {
   return (
     <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg">
       {options.map((option) => {
@@ -49,6 +61,7 @@ const Toggle = <T extends Option>({ options, value, onChange }: ToggleProps<T>) 
             option={option}
             selected={selected}
             onChange={onChange}
+            disabled={disabled}
           />
         );
       })}

@@ -9,9 +9,15 @@ type SelectProps<T> = {
   options: T[];
   value: T;
   onChange: (value: T) => void;
+  disabled?: boolean;
 };
 
-const Select = <T extends SelectOption>({ options, value, onChange }: SelectProps<T>) => {
+const Select = <T extends SelectOption>({
+  options,
+  value,
+  onChange,
+  disabled = false,
+}: SelectProps<T>) => {
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const option = options.find((o) => o.label === e.target.value);
     if (option) {
@@ -25,6 +31,7 @@ const Select = <T extends SelectOption>({ options, value, onChange }: SelectProp
         className="p-2 border-slate-300 rounded-lg flex bg-slate-100 grow appearance-none"
         value={value.label}
         onChange={handleChange}
+        disabled={disabled}
       >
         {options.map((option) => {
           return (

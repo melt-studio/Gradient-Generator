@@ -14,6 +14,7 @@ const Colors = ({ handleBackgroundChange }: ColorsProps) => {
   const color = useStore((state) => state.color);
   const colorMode = useStore((state) => state.colorMode);
   const background = useStore((state) => state.background);
+  const exporting = useStore((state) => state.exporting);
   const setValue = useStore((state) => state.setValue);
 
   const [viewport, setViewport] = useState({
@@ -35,6 +36,7 @@ const Colors = ({ handleBackgroundChange }: ColorsProps) => {
     label: "Palette",
     value: color,
     onChange: handleBackgroundChange("color", "uColors"),
+    disabled: exporting,
   };
 
   const toggleColor = {
@@ -46,6 +48,7 @@ const Colors = ({ handleBackgroundChange }: ColorsProps) => {
       }
       setValue("colorMode", value);
     },
+    disabled: exporting,
   };
 
   return (

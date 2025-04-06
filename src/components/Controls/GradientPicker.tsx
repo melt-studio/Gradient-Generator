@@ -14,6 +14,7 @@ type DragColorProps = {
   position: DOMRect | null;
   limit: { min: number; max: number };
   x: number;
+  disabled?: boolean;
 };
 
 const DragColor = ({
@@ -23,6 +24,7 @@ const DragColor = ({
   position,
   limit,
   x,
+  disabled = false,
 }: DragColorProps) => {
   const deleteDragDist = 20;
 
@@ -32,6 +34,7 @@ const DragColor = ({
   const deleteIcon = useRef<HTMLDivElement>(null);
 
   const handleDoubleClick = () => {
+    if (disabled) return;
     setPickerColor(color);
     setDisplayPicker(true);
   };
@@ -43,7 +46,7 @@ const DragColor = ({
       bounds="parent"
       defaultPosition={{ x, y: 0 }}
       onDrag={(e: DraggableEvent) => {
-        if (!position) return false;
+        if (!position || disabled) return false;
         const m = e as MouseEvent;
         const dragY = m.clientY - position.height - position.top + 15;
         const colors: GradientColor[] = JSON.parse(JSON.stringify(gradient.colors));
@@ -54,7 +57,7 @@ const DragColor = ({
         }
       }}
       onStop={(e: DraggableEvent, data: DraggableData) => {
-        if (!position) return false;
+        if (!position || disabled) return false;
         let colors: GradientColor[] = JSON.parse(JSON.stringify(gradient.colors));
         const dragY = (e as MouseEvent).clientY - position.height - position.top + 15;
 
@@ -86,7 +89,7 @@ const DragColor = ({
       >
         <span
           className="absolute w-6 h-6 top-0 left-0 p-0.5 cursor-pointer rounded-lg bg-white border border-slate-300 hover:border-slate-400 transition-colors group-[.react-draggable-dragging]:cursor-grabbing -translate-x-1/2"
-          tabIndex={0}
+          tabIndex={disabled ? -1 : 0}
           onKeyDown={(e) => {
             if (e.code === "Enter") {
               handleDoubleClick();
@@ -117,6 +120,7 @@ const GradientPicker = ({ viewport }: GradientPickerProps) => {
   const gradient = useStore((state) => state.gradient);
   const gradients = useStore((state) => state.gradients);
   const background = useStore((state) => state.background);
+  const exporting = useStore((state) => state.exporting);
   const setValue = useStore((state) => state.setValue);
 
   const bar = useRef<HTMLDivElement>(null);
@@ -144,7 +148,13 @@ const GradientPicker = ({ viewport }: GradientPickerProps) => {
     }
   }, [gradientColors, viewport]);
 
+  const setGradient = (gradient: Gradient) => {
+    if (exporting) return;
+    setValue("gradient", gradient);
+  };
+
   const addGradient = (gradient: Gradient) => {
+    if (exporting) return;
     setValue(
       "gradients",
       gradients.concat({ ...gradient, fixed: false, id: MathUtils.generateUUID() })
@@ -152,6 +162,7 @@ const GradientPicker = ({ viewport }: GradientPickerProps) => {
   };
 
   const removeGradient = (gradient: Gradient) => {
+    if (exporting) return;
     setValue(
       "gradients",
       gradients.filter((g) => g.id !== gradient.id)
@@ -159,7 +170,7 @@ const GradientPicker = ({ viewport }: GradientPickerProps) => {
   };
 
   const createColor = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!(e.target && position)) return;
+    if (!(e.target && position) || exporting) return;
 
     if ((e.target as HTMLDivElement).dataset.target !== "create-color") return;
 
@@ -249,6 +260,7 @@ const GradientPicker = ({ viewport }: GradientPickerProps) => {
                     limit={limit}
                     gradient={gradient}
                     x={x}
+                    disabled={exporting}
                   />
                 );
               })}
@@ -287,11 +299,11 @@ const GradientPicker = ({ viewport }: GradientPickerProps) => {
             <div
               key={gradient.id}
               className="w-7 h-7 rounded-lg border border-slate-300 hover:border-slate-400 transition-colors p-0.5 cursor-pointer relative group flex items-center justify-center"
-              onClick={() => setValue("gradient", gradient)}
+              onClick={() => setGradient(gradient)}
               onKeyDown={(e) => {
-                if (e.code === "Enter") setValue("gradient", gradient);
+                if (e.code === "Enter") setGradient(gradient);
               }}
-              tabIndex={0}
+              tabIndex={exporting ? -1 : 0}
             >
               <div
                 className="w-full h-full rounded-md"
@@ -313,7 +325,7 @@ const GradientPicker = ({ viewport }: GradientPickerProps) => {
             onKeyDown={(e) => {
               if (e.code === "Enter") addGradient(gradient);
             }}
-            tabIndex={0}
+            tabIndex={exporting ? -1 : 0}
           >
             <PlusIcon className="w-full h-full" />
           </div>

@@ -36,6 +36,7 @@ export type ExportFormat = {
   label: string;
   type: string;
   ext: string;
+  sequence?: boolean;
 };
 
 export interface Modal {

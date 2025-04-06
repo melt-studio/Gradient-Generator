@@ -5,6 +5,7 @@ import { useStore } from "../store";
 import { scaleCanvas } from "./useResize";
 import { MathUtils } from "three";
 import { timeout } from "../utils";
+import JSZip from "jszip";
 
 export interface ExportObject {
   download: () => Promise<void>;
@@ -20,6 +21,7 @@ const useExport = () => {
   const background = useStore((state) => state.background);
   const layout = useStore((state) => state.layout);
   const format = exportFormat.label.toLowerCase();
+  const sequence = exportFormat.sequence;
 
   const modalExport = {
     title: "Exporting",
@@ -35,6 +37,8 @@ const useExport = () => {
   };
 
   const ff = useRef<FFmpeg | null>(new FFmpeg());
+
+  const zip = new JSZip();
 
   const ffDir = "images";
   const filenamePrefix = "melt_gradient";
@@ -111,7 +115,7 @@ const useExport = () => {
     setValue("exporting", true);
     setValue("modal", modalExport);
 
-    const frameCount = format === "video" ? Math.floor(duration * exportFps) : 1;
+    const frameCount = format === "video" || sequence ? Math.floor(duration * exportFps) : 1;
 
     if (useStore.getState().exportCancelled) return;
 
@@ -119,7 +123,7 @@ const useExport = () => {
 
     const ffmpeg = ff.current;
 
-    if (format === "video") {
+    if (format === "video" || sequence) {
       setTime(0);
     }
 
@@ -164,13 +168,18 @@ const useExport = () => {
     if (useStore.getState().exportCancelled) return;
 
     // Download files
-    const filename = `${filenamePrefix}_${new Date().toISOString()}.${ffOptions.ext}`;
-    const filePath = `${ffDir}/${ffOptions.filename}`;
-    const file = await ffmpeg.readFile(filePath);
-    if (typeof file !== "string") {
-      // FileData typeof Uint8Array | string
-      const data = new Blob([file.buffer], { type: ffOptions.type });
-      downloadFile(data, filename);
+    if (sequence) {
+      // Create zip of images if sequence (e.g. bubble layers in static or video sequence of animation)
+      await createZip(frameCount);
+    } else {
+      const filename = `${filenamePrefix}_${new Date().toISOString()}.${ffOptions.ext}`;
+      const filePath = `${ffDir}/${ffOptions.filename}`;
+      const file = await ffmpeg.readFile(filePath);
+      if (typeof file !== "string") {
+        // FileData typeof Uint8Array | string
+        const data = new Blob([file.buffer], { type: ffOptions.type });
+        downloadFile(data, filename);
+      }
     }
 
     // Delete ffmpeg files and directory
@@ -198,7 +207,7 @@ const useExport = () => {
 
       const exportStatus = `${status}${j + 1}/${frameCount}`;
 
-      if (format === "video") {
+      if (format === "video" || sequence) {
         const time = j / exportFps;
         setTime(time);
       }
@@ -225,11 +234,34 @@ const useExport = () => {
       );
       const buffer = new Uint8Array(await blob.arrayBuffer());
 
-      const outFile = format === "video" ? `${j}.png` : ffOptions.filename;
+      const outFile = format === "video" || sequence ? `${j}.png` : ffOptions.filename;
 
       console.log(`FFMPEG: ${exportStatus} ${ffDir}/${outFile}`);
 
       await ff.current.writeFile(`${ffDir}/${outFile}`, buffer);
+    }
+  };
+
+  const createZip = async (fc: number = 1) => {
+    if (!ff.current) return;
+
+    setValue("modal", { ...modalExport, status: "Creating ZIP file" });
+    console.log("Creating ZIP file");
+
+    for (let i = 0; i < fc; i++) {
+      const blob = await ff.current.readFile(`${ffDir}/${i}.png`);
+      const outPath = `${filenamePrefix}_${i}.png`;
+
+      zip.file(outPath, blob);
+
+      if (i === fc - 1) {
+        const zipData = await zip.generateAsync({
+          type: "blob",
+          streamFiles: true,
+        });
+
+        downloadFile(zipData, `${filenamePrefix}_${new Date().toISOString()}.zip`);
+      }
     }
   };
 

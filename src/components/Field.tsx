@@ -1,5 +1,4 @@
 import { ChangeEvent, DetailedHTMLProps, InputHTMLAttributes } from "react";
-
 type FieldProps = {
   value: string | number;
   hint?: string;
@@ -7,6 +6,7 @@ type FieldProps = {
   onBlur?: (value: string) => void;
   placeholder?: string;
   readOnly?: boolean;
+  disabled?: boolean;
 };
 
 const Field = ({
@@ -16,6 +16,7 @@ const Field = ({
   onBlur,
   placeholder = "",
   readOnly = false,
+  disabled = false,
 }: FieldProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (onChange) onChange(e.target.value);
@@ -35,6 +36,7 @@ const Field = ({
     onBlur: handleBlur,
     placeholder,
     readOnly,
+    disabled,
   };
 
   return (

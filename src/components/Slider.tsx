@@ -9,9 +9,18 @@ type SliderProps = {
   min?: number;
   max?: number;
   step?: number;
+  disabled?: boolean;
 };
 
-const Slider = ({ label, value, onChange, step = 0.01, min = 0, max = 1 }: SliderProps) => {
+const Slider = ({
+  label,
+  value,
+  onChange,
+  step = 0.01,
+  min = 0,
+  max = 1,
+  disabled = false,
+}: SliderProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const valNumber = Number(e.target.value);
     onChange(valNumber);
@@ -37,9 +46,16 @@ const Slider = ({ label, value, onChange, step = 0.01, min = 0, max = 1 }: Slide
     onChange(valueNumber);
   };
 
+  const inputProps = {
+    value: inputValue,
+    onChange: handleInputChange,
+    onBlur: handleInputBlur,
+    disabled,
+  };
+
   return (
     <div className="flex items-center">
-      {label && <label className="w-20">{label}</label>}
+      {label && <label className="w-24">{label}</label>}
       <div className="flex items-center gap-2 grow">
         <div className="flex items-center gap-2 w-full relative group">
           <div className="h-0.5 absolute left-2 right-2 bg-slate-300 pointer-events-none group-hover:bg-slate-400/75 transition-colors"></div>
@@ -63,6 +79,7 @@ const Slider = ({ label, value, onChange, step = 0.01, min = 0, max = 1 }: Slide
             min={min}
             max={max}
             step={step}
+            disabled={disabled}
             className={`
               relative
               appearance-none
@@ -83,7 +100,7 @@ const Slider = ({ label, value, onChange, step = 0.01, min = 0, max = 1 }: Slide
             `}
           />
         </div>
-        <Field value={inputValue} onChange={handleInputChange} onBlur={handleInputBlur} />
+        <Field {...inputProps} />
       </div>
     </div>
   );

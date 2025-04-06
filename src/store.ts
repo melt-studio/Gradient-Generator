@@ -11,7 +11,6 @@ import {
   Modal,
 } from "./types";
 import config from "./config.json";
-import { ExportObject } from "./helpers/useExport";
 
 export const customLayout: Layout = { width: 1920, height: 1080, label: "Custom" };
 
@@ -34,6 +33,12 @@ export const colorModes: ColorMode[] = [
 export const exportFormats: ExportFormat[] = [
   { label: "Image", type: "image/png", ext: "png" },
   {
+    label: "Frames",
+    type: "image/png",
+    ext: "png",
+    sequence: true,
+  },
+  {
     label: "Video",
     type: "video/mp4",
     ext: "mp4",
@@ -52,6 +57,7 @@ export type State = {
   speed: number;
   drips: number;
   grain: number;
+  noise: number;
   colorMode: ColorMode;
   gradient: Gradient;
   gradients: Gradient[];
@@ -59,7 +65,6 @@ export type State = {
   duration: number;
   exportCancelled: boolean;
   exportFormat: ExportFormat;
-  exporter: ExportObject | null;
   ffmpegLoaded: boolean;
   modal: Modal | null;
 };
@@ -80,6 +85,7 @@ export const initialState = {
   speed: config.speed,
   drips: config.drips,
   grain: config.grain,
+  noise: config.noise,
   colorMode: colorModes[0],
   gradient: config.gradient,
   gradients: config.gradients,
@@ -114,6 +120,7 @@ export const useStore = create<Store>()(
               "speed",
               "drips",
               "grain",
+              "noise",
               "colorMode",
               "gradient",
               "gradients",

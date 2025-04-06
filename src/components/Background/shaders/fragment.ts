@@ -8,6 +8,7 @@ export const fragmentShader = /* glsl */ `
   uniform float uDrips;
   uniform float uSpeed;
   uniform float uGrain;
+  uniform float uNoise;
   uniform float uColorMode;
   uniform float uCount;
   uniform vec4 uColor0;
@@ -168,7 +169,7 @@ export const fragmentShader = /* glsl */ `
     float d2 = length(vUv - .5)  + .75;
     d = smin(d, d2, .2);
     
-    d += rand(vUv + d) * .01 * uDistortion;
+    d += rand(vUv + d) * .01 * mix(0., 5., uGrain);
     float t = mod(time - d, ld) / ld;
     t = mix(t, xx, distort);
 
@@ -226,7 +227,7 @@ export const fragmentShader = /* glsl */ `
 
     col = mix(col, cColorA, uColorMode);
 
-    col += rand(vUv) * .05 * uGrain;
+    col += rand(vUv) * .05 * uNoise;
 
     gl_FragColor = vec4(col, 1.);
   }

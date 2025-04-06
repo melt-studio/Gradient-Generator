@@ -8,6 +8,7 @@ import ControlGroup from "./ControlGroup";
 
 const Export = () => {
   const exportFormat = useStore((state) => state.exportFormat);
+  const exporting = useStore((state) => state.exporting);
   const ffmpegLoaded = useStore((state) => state.ffmpegLoaded);
   const duration = useStore((state) => state.duration);
   const setValue = useStore((state) => state.setValue);
@@ -22,15 +23,17 @@ const Export = () => {
     options: exportFormats,
     value: exportFormat,
     onChange: (value: ExportFormat) => setValue("exportFormat", value),
+    disabled: exporting,
   };
 
   const sliderDuration = {
-    label: "Duration",
+    label: "Duration (s)",
     value: duration,
     onChange: (value: number) => setValue("duration", value),
     min: 1,
     max: 8,
     step: 1,
+    disabled: exporting,
   };
 
   return (
@@ -38,8 +41,14 @@ const Export = () => {
       {ffmpegLoaded ? (
         <>
           <Toggle {...toggleExport} />
-          {exportFormat.label === "Video" && <Slider {...sliderDuration} />}
-          <Button label={`Export ${exportFormat.ext.toUpperCase()}`} onClick={handleExport} />
+          {["Video", "Frames"].includes(exportFormat.label) && <Slider {...sliderDuration} />}
+          <Button
+            label={`Export ${exportFormat.ext.toUpperCase()}${
+              exportFormat.sequence ? " Sequence" : ""
+            }`}
+            onClick={handleExport}
+            disabled={exporting}
+          />
         </>
       ) : (
         <div className="text-slate-400">Loading FFMPEG...</div>

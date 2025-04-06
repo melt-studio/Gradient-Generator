@@ -27,6 +27,7 @@ const Background = () => {
       uDrips: { value: config.drips },
       uSpeed: { value: config.speed },
       uGrain: { value: config.grain },
+      uNoise: { value: config.noise },
       uDistortion: { value: config.distortion },
       uResolution: {
         value: new Vector4(0, 0, 1024, 1024),

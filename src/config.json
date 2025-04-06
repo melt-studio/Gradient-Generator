@@ -1,6 +1,7 @@
 {
   "id": "092d3c73-157f-4d95-896b-ba227ae2ec8a",
-  "grain": 0.25,
+  "grain": 0.1,
+  "noise": 0.25,
   "distortion": 0.5,
   "speed": 1,
   "color": 0.5,

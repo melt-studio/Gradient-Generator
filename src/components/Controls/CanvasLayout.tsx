@@ -10,6 +10,7 @@ import { sizeLimit } from "../../helpers/useResize";
 const CanvasLayout = () => {
   const layout = useStore((state) => state.layout);
   const customLayout = useStore((state) => state.customLayout);
+  const exporting = useStore((state) => state.exporting);
   const setValue = useStore((state) => state.setValue);
 
   const [inputWidth, setInputWidth] = useState(`${layout.width}`);
@@ -75,18 +76,26 @@ const CanvasLayout = () => {
       setInputWidth(`${value.width}`);
       setInputHeight(`${value.height}`);
     },
+    disabled: exporting,
   };
 
   return (
     <ControlGroup label="Layout">
       <div className="flex items-center gap-2 w-full">
         <Select {...selectSize} />
-        <Field value={inputWidth} onChange={handleWidthChange} onBlur={handleWidthBlur} hint="W" />
+        <Field
+          value={inputWidth}
+          onChange={handleWidthChange}
+          onBlur={handleWidthBlur}
+          hint="W"
+          disabled={exporting}
+        />
         <Field
           value={inputHeight}
           onChange={handleHeightChange}
           onBlur={handleHeightBlur}
           hint="H"
+          disabled={exporting}
         />
       </div>
     </ControlGroup>

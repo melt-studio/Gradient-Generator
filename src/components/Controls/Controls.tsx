@@ -25,7 +25,7 @@ const Controls = () => {
       <Logo fill="#000000" />
       <div
         className={`flex flex-col gap-4 transition-opacity ${
-          exporting ? "pointer-events-none opacity-50" : ""
+          exporting ? "pointer-events-none opacity-50 select-none" : ""
         }`}
       >
         <CanvasLayout />
