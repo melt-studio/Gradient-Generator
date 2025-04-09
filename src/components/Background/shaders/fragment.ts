@@ -111,16 +111,6 @@ export const fragmentShader = /* glsl */ `
 
     float time = uTime * .2 * uSpeed;
 
-    float delay = 0.;
-    float t0 = 0.;
-    float ts0 = delay;
-    float ld0 = 3.;
-    float te0 = ts0 + ld0;
-    if (uTime < ts0) t0 = 0.;
-    else if (uTime < te0) t0 = map(uTime, ts0, te0, 0., 1.);
-    else t0 = 1.;
-    t0 = 1.;
-
     float ld = 2.;
 
     float distort = uDistortion;
@@ -136,7 +126,9 @@ export const fragmentShader = /* glsl */ `
     vignetteAmount = pow(vignetteAmount, 0.5);
     vignetteAmount = map(vignetteAmount, 0.0, 1.0, 0., 1.0);
     float d3 = 1. - vignetteAmount;
+    float vf = 1. - smoothstep(.5, 1., 1. - vUv.y);
     d3 = pow(d3, 4.);
+    d3 *= mix(vf, 1., smoothstep(.25, .75, uDistortion));
 
     vec2 p = vUv * 5.;
     for (float i = 0.0; i < 8.; i++) {
@@ -222,8 +214,6 @@ export const fragmentShader = /* glsl */ `
       cColorA = mix(cColorA, colorB, fc);
       cStopA = cB.a;
     }
-
-    // col *= t0;
 
     col = mix(col, cColorA, uColorMode);
 
