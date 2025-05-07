@@ -31,7 +31,7 @@ const Export = () => {
     value: duration,
     onChange: (value: number) => setValue("duration", value),
     min: 1,
-    max: 8,
+    max: 30,
     step: 1,
     disabled: exporting,
   };
